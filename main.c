@@ -101,10 +101,25 @@ float clamp(float f, float min, float max)
     else if(f < min){return min;}
     return f;
 }
-void stepTitle()
+void stepTitle(float speed)
 {
+    static uint m = 0;
     static uint p = 0;
     static double lt = 0.0;
+
+    static char m1[32] = {0};
+    static uint m1s = 0;
+    if(m1s == 0 && m == 0)
+    {
+        sprintf(m1, "Fancy a spin?");
+        m1s = strlen(m1);
+    }
+    else if(m1s == 0 && m == 1)
+    {
+        sprintf(m1, "Current speed %.2f", speed);
+        m1s = strlen(m1);
+    }
+    
     if(t > lt)
     {
         if(p == 0)
@@ -114,35 +129,23 @@ void stepTitle()
             p++;
             return;
         }
-        else if(p == 1)
-            glfwSetWindowTitle(window, "F");
-        else if(p == 2)
-            glfwSetWindowTitle(window, "Fa");
-        else if(p == 3)
-            glfwSetWindowTitle(window, "Fan");
-        else if(p == 4)
-            glfwSetWindowTitle(window, "Fanc");
-        else if(p == 5)
-            glfwSetWindowTitle(window, "Fancy");
-        else if(p == 6)
-            glfwSetWindowTitle(window, "Fancy a");
-        else if(p == 7)
-            glfwSetWindowTitle(window, "Fancy a s");
-        else if(p == 8)
-            glfwSetWindowTitle(window, "Fancy a sp");
-        else if(p == 9)
-            glfwSetWindowTitle(window, "Fancy a spi");
-        else if(p == 10)
-            glfwSetWindowTitle(window, "Fancy a spin");
-        else if(p == 11)
+        else if(p > 0 && p < m1s)
         {
-            glfwSetWindowTitle(window, "Fancy a spin?");
-            lt = t+6.0;
+            char t[32] = {0};
+            for(uint i = 0; i < p; i++)
+                t[i] = m1[i];
+            glfwSetWindowTitle(window, t);
             p++;
+        }
+        else if(p == m1s)
+        {
+            glfwSetWindowTitle(window, m1);
+            lt  = t+6.0;
+            p   = 0;
+            m   = 1 - m;
+            m1s = 0;
             return;
         }
-        p++;
-        if(p >= 12){p=0;}
         lt = t+0.09+(randf()*0.04);
     }
 }
@@ -158,10 +161,8 @@ void main_loop()
     if(focus_cursor == 1)
     {
         glfwGetCursorPos(window, &x, &y);
-
         xrot += (ww2-x)*sens;
         yrot += (wh2-y)*sens;
-
         glfwSetCursorPos(window, ww2, wh2);
     }
 
@@ -170,9 +171,10 @@ void main_loop()
     mRotate(&view, yrot, 1.f, 0.f, 0.f);
     mRotate(&view, xrot, 0.f, 0.f, 1.f);
     
+    static f32 ss = 0.08f;
     if(focus_cursor == 0)
     {
-        static f32 ss = 0.08f;
+        
         static f32 tft = 0.f;
         tft += dt;
         yrot += sinf(tft*0.1f)*-ss;
@@ -188,8 +190,7 @@ void main_loop()
         const f32 ft = tft*0.5f;
         glUniform3f(lightpos_id, sinf(ft) * 10.0f, cosf(ft) * 10.0f, sinf(ft) * 10.0f);
     }
-
-    stepTitle();
+    stepTitle(ss);
 
 //*************************************
 // render
