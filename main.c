@@ -101,6 +101,51 @@ float clamp(float f, float min, float max)
     else if(f < min){return min;}
     return f;
 }
+void stepTitle()
+{
+    static uint p = 0;
+    static double lt = 0.0;
+    if(t > lt)
+    {
+        if(p == 0)
+        {
+            glfwSetWindowTitle(window, "L3 Menger Cube");
+            lt = t+6.0;
+            p++;
+            return;
+        }
+        else if(p == 1)
+            glfwSetWindowTitle(window, "F");
+        else if(p == 2)
+            glfwSetWindowTitle(window, "Fa");
+        else if(p == 3)
+            glfwSetWindowTitle(window, "Fan");
+        else if(p == 4)
+            glfwSetWindowTitle(window, "Fanc");
+        else if(p == 5)
+            glfwSetWindowTitle(window, "Fancy");
+        else if(p == 6)
+            glfwSetWindowTitle(window, "Fancy a");
+        else if(p == 7)
+            glfwSetWindowTitle(window, "Fancy a s");
+        else if(p == 8)
+            glfwSetWindowTitle(window, "Fancy a sp");
+        else if(p == 9)
+            glfwSetWindowTitle(window, "Fancy a spi");
+        else if(p == 10)
+            glfwSetWindowTitle(window, "Fancy a spin");
+        else if(p == 11)
+        {
+            glfwSetWindowTitle(window, "Fancy a spin?");
+            lt = t+6.0;
+            p++;
+            return;
+        }
+        p++;
+        if(p >= 12){p=0;}
+        lt = t+0.09+(randf()*0.04);
+    }
+}
 
 //*************************************
 // update & render
@@ -117,11 +162,6 @@ void main_loop()
         xrot += (ww2-x)*sens;
         yrot += (wh2-y)*sens;
 
-        if(yrot > PI)
-            yrot = PI;
-        if(yrot < 0.f)
-            yrot = 0.f;
-
         glfwSetCursorPos(window, ww2, wh2);
     }
 
@@ -132,7 +172,11 @@ void main_loop()
     
     if(focus_cursor == 0)
     {
-        yrot += sinf(dt*0.1f)*-0.3f;
+        static f32 ss = 0.08f;
+        static f32 tft = 0.f;
+        tft += dt;
+        yrot += sinf(tft*0.1f)*-ss;
+        ss += 0.000001f;
         xrot += dt*0.1f;
         r += randfc()*dt*1.6f;
         g += randfc()*dt*1.6f;
@@ -141,11 +185,11 @@ void main_loop()
         g = clamp(g, -1.f, 1.f);
         b = clamp(b, -1.f, 1.f);
         glUniform3f(color_id, r, g, b);
-        static f32 tft = 0.f;
-        tft += dt;
         const f32 ft = tft*0.5f;
         glUniform3f(lightpos_id, sinf(ft) * 10.0f, cosf(ft) * 10.0f, sinf(ft) * 10.0f);
     }
+
+    stepTitle();
 
 //*************************************
 // render
