@@ -95,6 +95,15 @@ float urandf()
     close(f);
     return ((float)s) * RECIP_FLOAT_UINT64_MAX;
 }
+float urandfc()
+{
+    static const float RECIP_FLOAT_UINT64_MAX = 2.f/(float)UINT64_MAX;
+    int f = open("/dev/urandom", O_RDONLY | O_CLOEXEC);
+    uint64_t s = 0;
+    read(f, &s, sizeof(uint64_t));
+    close(f);
+    return (((float)s) * RECIP_FLOAT_UINT64_MAX)-1.f;
+}
 float clamp(float f, float min, float max)
 {
     if(f > max){return max;}
@@ -180,9 +189,9 @@ void main_loop()
         yrot += sinf(tft*0.1f)*-ss;
         ss += 0.000001f;
         xrot += dt*0.1f;
-        r += randfc()*dt*1.6f;
-        g += randfc()*dt*1.6f;
-        b += randfc()*dt*1.6f;
+        r += urandfc()*dt*1.6f;
+        g += urandfc()*dt*1.6f;
+        b += urandfc()*dt*1.6f;
         r = clamp(r, -1.f, 1.f);
         g = clamp(g, -1.f, 1.f);
         b = clamp(b, -1.f, 1.f);
@@ -279,7 +288,7 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
         }
         else if(button == GLFW_MOUSE_BUTTON_RIGHT)
         {
-            r = urandf(), g = urandf(), b = urandf();
+            r = urandfc(), g = urandfc(), b = urandfc();
             glUniform3f(color_id, r, g, b);
         }
     }
