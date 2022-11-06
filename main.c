@@ -192,6 +192,7 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
             glUniform3f(lightpos_id, lightpos.x, lightpos.y, lightpos.z);
             glUniform1f(opacity_id, 1.0f);
             glUniform3f(color_id, r, g, b);
+            normalmat_id = -1;
         }
         else if(key == GLFW_KEY_X)
         {
