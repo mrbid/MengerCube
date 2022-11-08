@@ -29,6 +29,7 @@
 #define SEIR_RAND
 
 #include "inc/esAux2.h"
+//#define REGULAR_PHONG
 
 #include "inc/res.h"
 #include "ncube.h"
@@ -67,7 +68,6 @@ mat view;
 ESModel mdlMenger;
 
 // camera vars
-vec lightpos = {0.f, 0.f, 0.f};
 #define FAR_DISTANCE 120.f
 uint focus_cursor = 0;
 double sens = 0.001f;
@@ -76,6 +76,7 @@ f32 yrot = d2PI;
 f32 zoom = -16.0f; // -6.0f / -26.0f
 
 // sim vars
+vec lightpos = {0.f, 0.f, 0.f};
 f32 r=0.f,g=0.f,b=0.f;
 
 //*************************************
