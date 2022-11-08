@@ -188,7 +188,7 @@ void main_loop()
         static f32 tft = 0.f;
         tft += dt;
         yrot += sinf(tft*0.1f)*-ss;
-        ss += 0.000001f;
+        ss += dt*0.000001f;
         xrot += dt*0.1f;
         r += urandfc()*dt*1.6f;
         g += urandfc()*dt*1.6f;
