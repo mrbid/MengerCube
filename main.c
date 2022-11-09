@@ -487,7 +487,7 @@ int main(int argc, char** argv)
                 printf("[%s] maxfps auto corrected from %.2f to %.2f.\n", strts, maxfps, nfps);
             }
             maxfps = nfps;
-            dt = 1.0 / (float)maxfps;
+            dt = 1.0f / (float)maxfps;
             ac = time(0) + 6;
             fct = 1;
         }
