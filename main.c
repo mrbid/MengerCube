@@ -13,6 +13,9 @@
     - Don't comment it out and the simulation speed
     should be stable at all framerates, even auto-
     correcting at high framerates. But less fun.
+
+    Most people don't detect their delta time step
+    they just use the current frame delta.
 */
 
 #include <math.h>
@@ -85,7 +88,7 @@ ESModel mdlMenger;
 uint focus_cursor = 0;
 double sens = 0.001f;
 f32 xrot = 0.f;
-f32 yrot = d2PI;
+f32 yrot = d2PI; // face on until [1]
 f32 zoom = -16.0f; // -6.0f / -26.0f
 
 // sim vars
@@ -221,8 +224,8 @@ void main_loop(uint dotick)
         glUniform3f(color_id, r, g, b);
         const f32 ft = tft*0.5f;
         glUniform3f(lightpos_id, sinf(ft) * 10.0f, cosf(ft) * 10.0f, sinf(ft) * 10.0f);
+        stepTitle(ss);
     }
-    stepTitle(ss);
 
 //*************************************
 // render
@@ -436,7 +439,7 @@ int main(int argc, char** argv)
     
     // bind menger to render
     r = urandf(), g = urandf(), b = urandf();
-    glUniform3f(color_id, 1.0, 1.0, 1.0);
+    glUniform3f(color_id, r, g, b);
 
     glBindBuffer(GL_ARRAY_BUFFER, mdlMenger.vid);
     glVertexAttribPointer(position_id, 3, GL_FLOAT, GL_FALSE, 0, 0);
@@ -459,6 +462,8 @@ int main(int argc, char** argv)
     time_t ac = time(0) + 1;
 
 #ifndef FUN
+    glfwSetWindowTitle(window, "Detecting frame rate...");
+    yrot = sinf(-1.3f)*100.f; // [1]
     uint fct = 0;
 #else
     const uint fct = 1;
