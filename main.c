@@ -78,7 +78,7 @@ f32 zoom = -16.0f; // -6.0f / -26.0f
 // sim vars
 vec lightpos = {0.f, 0.f, 0.f};
 f32 r=0.f,g=0.f,b=0.f;
-//#define FUN
+#define FUN
 
 //*************************************
 // utility functions
