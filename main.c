@@ -42,7 +42,7 @@
 
 #define SEIR_RAND       // uncommenting this define will enable the MMX random (it's a marginally slower)
 //#define REGULAR_PHONG   // or Blinn-Phong by default
-#define FUN             // uncomment this for stable simulation speed at different frame rates
+//#define FUN             // uncomment this for stable simulation speed at different frame rates
 
 #include "inc/esAux2.h"
 #include "inc/res.h"
@@ -468,7 +468,8 @@ int main(int argc, char** argv)
 #endif
     
     // fps accurate event loop
-    const useconds_t wait_interval = 1000000 / maxfps; // fixed timestep
+    useconds_t wait_interval = 1000000 / maxfps; // fixed timestep
+    if(wait_interval == 0){wait_interval = 100;} // limited to 10,000 FPS maximum
     useconds_t wait = wait_interval;
     while(!glfwWindowShouldClose(window))
     {
@@ -499,6 +500,8 @@ int main(int argc, char** argv)
 
         // accurate fps
         wait = wait_interval - (useconds_t)((glfwGetTime() - t) * 1000000.0);
+        if(wait > 1000000){wait = wait_interval;}
+        //printf("%u: %u - %u\n", wait_interval, wait, (useconds_t)((glfwGetTime() - t) * 1000000.0));
         if(wait > wait_interval)
             wait = wait_interval;
         
