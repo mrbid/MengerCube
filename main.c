@@ -78,6 +78,7 @@ f32 zoom = -16.0f; // -6.0f / -26.0f
 // sim vars
 vec lightpos = {0.f, 0.f, 0.f};
 f32 r=0.f,g=0.f,b=0.f;
+#define FUN
 
 //*************************************
 // utility functions
@@ -184,11 +185,20 @@ void main_loop()
     static f32 ss = 0.08f;
     if(focus_cursor == 0)
     {
-        
+#ifdef FUN
+        // this is not stable at different framerates
         static f32 tft = 0.f;
         tft += dt;
         yrot += sinf(tft*0.1f)*-ss;
         ss += dt*0.000001f;
+#else
+        // this is stable at different framerates
+        static f32 tft = -1.3f;
+        tft += dt*ss;
+        yrot = sinf(tft)*100.f;
+        ltv += dt*0.1f;
+        ss += dt*0.001f;
+#endif
         xrot += dt*0.1f;
         r += urandfc()*dt*1.6f;
         g += urandfc()*dt*1.6f;
