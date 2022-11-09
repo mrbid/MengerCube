@@ -147,7 +147,7 @@ float randf()
     mm0 = _mm_add_pi32(mm0, mm1);
     srandfq = _m_to_int64(mm0);
     _m_empty();
-    return fabsf(srandfq) * INV_FLOAT_MAX;
+    return fabsf((float)srandfq) * INV_FLOAT_MAX;
 }
 
 float randfc()
@@ -157,7 +157,7 @@ float randfc()
     mm0 = _mm_add_pi32(mm0, mm1);
     srandfq = _m_to_int64(mm0);
     _m_empty();
-    return srandfq * INV_FLOAT_MAX;
+    return ((float)srandfq) * INV_FLOAT_MAX;
 }
 
 #endif
