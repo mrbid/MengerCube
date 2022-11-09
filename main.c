@@ -2,7 +2,7 @@
     James William Fletcher (github.com/mrbid)
         November 2022
 
-    L84: #define FUN
+    L45: #define FUN
     - Comment this out and any deviation from the
     intended maxfps of 144 will cause the simulation
     speed to change. Going over the maximum frame
@@ -40,12 +40,11 @@
     #define NOSSE
 #endif
 
-// uncommenting this define will enable the MMX random when using fRandFloat (it's a marginally slower)
-#define SEIR_RAND
+#define SEIR_RAND       // uncommenting this define will enable the MMX random when using fRandFloat (it's a marginally slower)
+//#define REGULAR_PHONG   // or Blinn-Phong by default
+#define FUN             // uncomment this for stable simulation speed at different frame rates
 
 #include "inc/esAux2.h"
-//#define REGULAR_PHONG
-
 #include "inc/res.h"
 #include "ncube.h"
 
@@ -94,7 +93,6 @@ f32 zoom = -14.0f; // -6.0f / -26.0f
 // sim vars
 vec lightpos = {0.f, 0.f, 0.f};
 f32 r=0.f,g=0.f,b=0.f;
-#define FUN
 
 //*************************************
 // utility functions
