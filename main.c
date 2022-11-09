@@ -1,6 +1,18 @@
 /*
     James William Fletcher (github.com/mrbid)
         November 2022
+
+    L84: #define FUN
+    - Comment this out and any deviation from the
+    intended maxfps of 144 will cause the simulation
+    speed to change. Going over the maximum frame
+    rate the computer can render will slow down
+    the simulation but upto that point it will be
+    speeding up. Reducing the framerate from 144
+    will also slow down the simulation.
+    - Don't comment it out and the simulation speed
+    should be stable at all framerates, even auto-
+    correcting at high framerates. But less fun.
 */
 
 #include <math.h>
@@ -48,6 +60,7 @@ f32 aspect;
 double x,y,lx,ly;
 double rww, ww, rwh, wh, ww2, wh2;
 double uw, uh, uw2, uh2; // normalised pixel dpi
+double maxfps = 144.0;
 
 // render state id's
 GLint projection_id;
@@ -164,7 +177,7 @@ void stepTitle(float speed)
 //*************************************
 // update & render
 //*************************************
-void main_loop()
+void main_loop(uint dotick)
 {
 //*************************************
 // camera
@@ -183,7 +196,7 @@ void main_loop()
     mRotate(&view, xrot, 0.f, 0.f, 1.f);
     
     static f32 ss = 0.08f;
-    if(focus_cursor == 0)
+    if(focus_cursor == 0 && dotick == 1)
     {
 #ifdef FUN
         // this is not stable at different framerates
@@ -245,7 +258,10 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
             {
                 char strts[16];
                 timestamp(&strts[0]);
-                printf("[%s] FPS: %g\n", strts, fc/(t-lfct));
+                const double nfps = fc/(t-lfct);
+                printf("[%s] FPS: %g\n", strts, nfps);
+                maxfps = nfps;
+                dt = 1.0 / (float)maxfps;
                 lfct = t;
                 fc = 0;
             }
@@ -336,7 +352,6 @@ int main(int argc, char** argv)
     if(argc >= 2){msaa = atoi(argv[1]);}
 
     // allow framerate cap
-    double maxfps = 144.0;
     if(argc >= 3){maxfps = atof(argv[2]);}
 
     // help
@@ -441,6 +456,13 @@ int main(int argc, char** argv)
     t = glfwGetTime();
     lfct = t;
     dt = 1.0 / (float)maxfps; // fixed timestep delta-time
+    time_t ac = time(0) + 1;
+
+#ifndef FUN
+    uint fct = 0;
+#else
+    const uint fct = 1;
+#endif
     
     // fps accurate event loop
     const useconds_t wait_interval = 1000000 / maxfps; // fixed timestep
@@ -450,8 +472,27 @@ int main(int argc, char** argv)
         usleep(wait);
         t = glfwGetTime();
 
+#ifndef FUN
+        // auto correct max fps
+        if(time(0) > ac)
+        {
+            const double nfps = fc/(t-lfct);
+            if(fabs(nfps - maxfps) > 6.f)
+            {
+                char strts[16];
+                timestamp(&strts[0]);
+                printf("[%s] maxfps auto corrected from %.2f to %.2f.\n", strts, maxfps, nfps);
+            }
+            maxfps = nfps;
+            dt = 1.0 / (float)maxfps;
+            ac = time(0) + 6;
+            fct = 1;
+        }
+#endif
+        
+        // don't tick our internal state until we know we have a decent delta-time [dt]
         glfwPollEvents();
-        main_loop();
+        main_loop(fct);
 
         // accurate fps
         wait = wait_interval - (useconds_t)((glfwGetTime() - t) * 1000000.0);
