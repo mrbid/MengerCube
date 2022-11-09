@@ -264,7 +264,7 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
                 const double nfps = fc/(t-lfct);
                 printf("[%s] FPS: %g\n", strts, nfps);
                 maxfps = nfps;
-                dt = 1.0 / (float)maxfps;
+                dt = 1.0f / (float)maxfps;
                 lfct = t;
                 fc = 0;
             }
@@ -458,7 +458,7 @@ int main(int argc, char** argv)
     // init
     t = glfwGetTime();
     lfct = t;
-    dt = 1.0 / (float)maxfps; // fixed timestep delta-time
+    dt = 1.0f / (float)maxfps; // fixed timestep delta-time
 
 #ifndef FUN
     glfwSetWindowTitle(window, "Detecting frame rate...");
