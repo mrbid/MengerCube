@@ -94,7 +94,7 @@ f32 zoom = -16.0f; // -6.0f / -26.0f
 // sim vars
 vec lightpos = {0.f, 0.f, 0.f};
 f32 r=0.f,g=0.f,b=0.f;
-#define FUN
+//#define FUN
 
 //*************************************
 // utility functions
@@ -459,11 +459,11 @@ int main(int argc, char** argv)
     t = glfwGetTime();
     lfct = t;
     dt = 1.0 / (float)maxfps; // fixed timestep delta-time
-    time_t ac = time(0) + 1;
 
 #ifndef FUN
     glfwSetWindowTitle(window, "Detecting frame rate...");
     yrot = sinf(-1.3f)*100.f; // [1]
+    time_t ac = time(0) + 1;
     uint fct = 0;
 #else
     const uint fct = 1;
