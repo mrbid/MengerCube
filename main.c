@@ -42,7 +42,7 @@
 
 #define SEIR_RAND       // uncommenting this define will enable the MMX random (it's a marginally slower)
 //#define REGULAR_PHONG   // or Blinn-Phong by default
-//#define FUN             // uncomment this for stable simulation speed at different frame rates
+#define FUN             // uncomment this for stable simulation speed at different frame rates
 
 #include "inc/esAux2.h"
 #include "inc/res.h"
