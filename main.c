@@ -89,7 +89,7 @@ uint focus_cursor = 0;
 double sens = 0.001f;
 f32 xrot = 0.f;
 f32 yrot = d2PI; // face on until [1]
-f32 zoom = -16.0f; // -6.0f / -26.0f
+f32 zoom = -14.0f; // -6.0f / -26.0f
 
 // sim vars
 vec lightpos = {0.f, 0.f, 0.f};
