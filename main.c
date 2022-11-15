@@ -230,7 +230,6 @@ void main_loop(uint dotick)
 //*************************************
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
-    glUniformMatrix4fv(projection_id, 1, GL_FALSE, (GLfloat*) &projection.m[0][0]);
     glUniformMatrix4fv(modelview_id, 1, GL_FALSE, (GLfloat*) &view.m[0][0]);
     if(normalmat_id != -1)
     {
@@ -270,6 +269,7 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
         else if(key == GLFW_KEY_Z)
         {
             shadeLambert1(&position_id, &projection_id, &modelview_id, &lightpos_id, &normal_id, &color_id, &opacity_id);
+            glUniformMatrix4fv(projection_id, 1, GL_FALSE, (GLfloat*) &projection.m[0][0]);
             glUniform3f(lightpos_id, lightpos.x, lightpos.y, lightpos.z);
             glUniform1f(opacity_id, 1.0f);
             glUniform3f(color_id, r, g, b);
@@ -278,6 +278,7 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
         else if(key == GLFW_KEY_X)
         {
             shadePhong1(&position_id, &projection_id, &modelview_id, &normalmat_id, &lightpos_id, &normal_id, &color_id, &opacity_id);
+            glUniformMatrix4fv(projection_id, 1, GL_FALSE, (GLfloat*) &projection.m[0][0]);
             glUniform3f(lightpos_id, lightpos.x, lightpos.y, lightpos.z);
             glUniform1f(opacity_id, 1.0f);
             glUniform3f(color_id, r, g, b);
@@ -432,6 +433,7 @@ int main(int argc, char** argv)
 
     // setup shader
     shadePhong1(&position_id, &projection_id, &modelview_id, &normalmat_id, &lightpos_id, &normal_id, &color_id, &opacity_id);
+    glUniformMatrix4fv(projection_id, 1, GL_FALSE, (GLfloat*) &projection.m[0][0]);
     glUniform3f(lightpos_id, lightpos.x, lightpos.y, lightpos.z);
     glUniform1f(opacity_id, 0.5f);
     
