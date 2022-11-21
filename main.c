@@ -503,10 +503,9 @@ int main(int argc, char** argv)
 
         // accurate fps
         wait = wait_interval - (useconds_t)((glfwGetTime() - t) * 1000000.0);
-        if(wait > 1000000){wait = wait_interval;}
-        //printf("%u: %u - %u\n", wait_interval, wait, (useconds_t)((glfwGetTime() - t) * 1000000.0));
         if(wait > wait_interval)
             wait = wait_interval;
+        //printf("%u: %u - %u\n", wait_interval, wait, (useconds_t)((glfwGetTime() - t) * 1000000.0));
         
         fc++;
     }
